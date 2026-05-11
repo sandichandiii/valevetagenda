@@ -224,10 +224,20 @@
         </div>
 
         <aside class="panel">
-          <h2>Horas recibidas</h2>
-          <p class="muted">Vista rápida para revisar lo que entra desde la web.</p>
-          <div id="appointments-list" class="list-table"></div>
-        </aside>
+  <h2>Solicitud recibida</h2>
+  <p class="muted">Aquí verás la confirmación del envío. Las horas agendadas solo las veré yo en el panel privado.</p>
+  <div id="bookingList" class="list" style="margin-top:1rem">
+    <article class="item">
+      <div>
+        <strong>Aún no has enviado una solicitud</strong><br>
+        <span class="muted">Completa el formulario para pedir tu hora.</span>
+      </div>
+      <div>—</div>
+      <div>—</div>
+      <span class="badge">Espera</span>
+    </article>
+  </div>
+</aside>
       </div>
     </section>
 
@@ -345,15 +355,17 @@
     const hasSupabase = window.APP_CONFIG?.supabaseUrl && window.APP_CONFIG?.supabaseAnonKey;
     const supabase = hasSupabase ? createClient(window.APP_CONFIG.supabaseUrl, window.APP_CONFIG.supabaseAnonKey) : null;
 
-    function renderAppointments() {
-      listAppointments.innerHTML = appointments.length ? appointments.map(item => `
-        <article class="record">
-          <div><strong>${item.pet_name}</strong><br><span class="muted">${item.owner_name}</span></div>
-          <div>${item.species || '—'}</div>
-          <div>${new Date(item.appointment_date).toLocaleString('es-CL')}</div>
-          <span class="badge">Pendiente</span>
-        </article>
-      `).join('') : '<p class="muted">Todavía no hay horas registradas.</p>';
+  function renderAppointments() {
+  listAppointments.innerHTML = `
+    <article class="record">
+      <div>
+        <strong>Acabas de agendar una hora</strong><br><span class="muted">Te contactaremos en breve para confirmar la hora.</span>
+      </div>
+      <div>—</div>
+      <div>—</div>
+      <span class="badge">Recibida</span>
+    </article>
+  `;
     }
 
     function renderCases() {
@@ -386,7 +398,7 @@
       e.target.reset();
       if (!supabase) return;
       const { error } = await supabase.from('appointments').insert(payload);
-      appointmentStatus.textContent = error ? 'No se pudo guardar en nube. Revisa configuración o permisos.' : 'Reserva guardada en nube correctamente.';
+    appointmentStatus.textContent = error ? 'No se pudo guardar en nube. Revisa configuración o permisos.' : 'Acabas de agendar una hora. Te contactaremos en breve para confirmar la hora.';
     });
 
     document.getElementById('case-form').addEventListener('submit', async (e) => {
