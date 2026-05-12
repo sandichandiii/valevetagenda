@@ -397,17 +397,32 @@ const { data: clinical } = await supabase
       appointmentStatus.textContent = 'Conectado a Supabase: las reservas se leen y guardan en nube.';
       caseStatus.textContent = 'Conectado a Supabase: los casos clínicos se leen y guardan en nube.';
     }
+document.getElementById('appointment-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
 
-    document.getElementById('appointment-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const fd = new FormData(e.target);
-      const payload = Object.fromEntries(fd.entries());
-      appointments.unshift(payload);
-      renderAppointments();
-      e.target.reset();
-      if (!supabase) return;
-      const { error } = await supabase.from('appointments').insert(payload);
-    appointmentStatus.textContent = error ? 'No se pudo guardar en nube. Revisa configuración o permisos.' : 'Acabas de agendar una hora. Te contactaremos en breve para confirmar la hora.';
+  const payload = {
+    owner_name: fd.get('owner_name'),
+    pet_name: fd.get('pet_name'),
+    species: fd.get('species'),
+    appointment_at: fd.get('appointment_date'),
+    reason: fd.get('reason'),
+    notes: null,
+    status: 'pendiente'
+  };
+
+  appointments.unshift(payload);
+  renderAppointments();
+  e.target.reset();
+
+  if (!supabase) return;
+
+  const { error } = await supabase.from('appointments').insert(payload);
+  appointmentStatus.textContent = error
+    ? 'No se pudo guardar en nube. Revisa configuración o permisos.'
+    : 'Acabas de agendar una hora. Te contactaremos en breve para confirmar la hora.';
+});
+    
     });
 
     document.getElementById('case-form').addEventListener('submit', async (e) => {
