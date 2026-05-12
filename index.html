@@ -191,9 +191,14 @@
           <p class="muted">Este formulario funciona en modo demostración. Al conectar Supabase, las reservas se guardarán en nube.</p>
           <form id="appointment-form" class="form-grid">
             <div class="field">
-              <label for="owner_name">Nombre del tutor</label>
-              <input id="owner_name" name="owner_name" placeholder="Ej. Valentina Soto" required />
-            </div>
+  <label for="owner_name">Nombre del tutor</label>
+  <input id="owner_name" name="owner_name" placeholder="Ej. Juan Gonzales" required />
+</div>
+
+<div class="field">
+  <label for="owner_email">Correo del tutor</label>
+  <input id="owner_email" name="owner_email" type="email" placeholder="Ej. juan@email.com" required />
+</div>
             <div class="field">
               <label for="pet_name">Nombre del paciente</label>
               <input id="pet_name" name="pet_name" placeholder="Ej. Luna" required />
@@ -450,18 +455,19 @@
     }
 
     document.getElementById('appointment-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const fd = new FormData(e.target);
+  e.preventDefault();
+  const fd = new FormData(e.target);
 
-      const payload = {
-        owner_name: fd.get('owner_name'),
-        pet_name: fd.get('pet_name'),
-        species: fd.get('species'),
-        appointment_at: fd.get('appointment_date'),
-        reason: fd.get('reason'),
-        notes: null,
-        status: 'pendiente'
-      };
+  const payload = {
+    owner_name: fd.get('owner_name'),
+    owner_email: fd.get('owner_email'),
+    pet_name: fd.get('pet_name'),
+    species: fd.get('species'),
+    appointment_at: fd.get('appointment_date'),
+    reason: fd.get('reason'),
+    notes: null,
+    status: 'pendiente'
+  };
 
       appointments.unshift(payload);
       renderAppointments();
