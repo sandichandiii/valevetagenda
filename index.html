@@ -389,19 +389,30 @@ const { data: clinical } = await supabase.from('clinical_cases').select('*').ord
       appointmentStatus.textContent = 'Conectado a Supabase: las reservas se leen y guardan en nube.';
       caseStatus.textContent = 'Conectado a Supabase: los casos clínicos se leen y guardan en nube.';
     }
-document.getElementById('appointment-form').addEventListener('submit', async (e) => {
+document.getElementById('case-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const fd = new FormData(e.target);
 
   const payload = {
-    owner_name: fd.get('owner_name'),
-    pet_name: fd.get('pet_name'),
-    species: fd.get('species'),
-    appointment_at: fd.get('appointment_date'),
-    reason: fd.get('reason'),
-    notes: null,
-    status: 'pendiente'
+    pet_name: fd.get('case_pet'),
+    owner_name: fd.get('case_owner'),
+    opened_at: fd.get('case_date'),
+    status: fd.get('case_status'),
+    assessment: fd.get('case_assessment'),
+    plan: fd.get('case_plan')
   };
+
+  cases.unshift(payload);
+  renderCases();
+  e.target.reset();
+
+  if (!supabase) return;
+
+  const { error } = await supabase.from('clinical_cases').insert(payload);
+  caseStatus.textContent = error
+    ? 'No se pudo guardar en nube. Revisa configuración o permisos.'
+    : 'Caso clínico guardado en nube correctamente.';
+});
 
   appointments.unshift(payload);
   renderAppointments();
