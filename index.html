@@ -459,15 +459,15 @@
   const fd = new FormData(e.target);
 
   const payload = {
-    owner_name: fd.get('owner_name'),
-    owner_email: fd.get('owner_email'),
-    pet_name: fd.get('pet_name'),
-    species: fd.get('species'),
-    appointment_at: fd.get('appointment_date'),
-    reason: fd.get('reason'),
-    notes: null,
-    status: 'pendiente'
-  };
+  owner_name: fd.get('owner_name'),
+  owner_email: fd.get('owner_email'),
+  pet_name: fd.get('pet_name'),
+  species: fd.get('species'),
+  appointment_at: fd.get('appointment_date'),
+  reason: fd.get('reason'),
+  notes: null,
+  status: 'pendiente'
+};
 
       appointments.unshift(payload);
       renderAppointments();
