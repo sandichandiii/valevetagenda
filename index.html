@@ -381,8 +381,17 @@
 
     async function loadCloudData() {
       if (!supabase) return;
-      const { data: appts } = await supabase.from('appointments').select('*').order('appointment_date', { ascending: true }).limit(10);
-      const { data: clinical } = await supabase.from('clinical_cases').select('*').order('case_date', { ascending: false }).limit(10);
+const { data: appts } = await supabase
+  .from('appointments')
+  .select('*')
+  .order('appointment_at', { ascending: true })
+  .limit(10);
+
+const { data: clinical } = await supabase
+  .from('clinical_cases')
+  .select('*')
+  .order('opened_at', { ascending: false })
+  .limit(10);    
       if (appts) { appointments.splice(0, appointments.length, ...appts); renderAppointments(); }
       if (clinical) { cases.splice(0, cases.length, ...clinical); renderCases(); }
       appointmentStatus.textContent = 'Conectado a Supabase: las reservas se leen y guardan en nube.';
